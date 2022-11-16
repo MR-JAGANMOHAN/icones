@@ -10,9 +10,9 @@ const timeAgo = useTimeAgo(new Date(buildTime))
       built by
       <a
         class="opacity-75 hover:opacity-100"
-        href="https://github.com/antfu"
+        href="https://mr-jaganmohan.github.io/"
         target="_blank"
-      >@antfu</a>,
+      >@JAGAN MOHAN</a>,
       powered by
       <a
         class="opacity-75 hover:opacity-100"
