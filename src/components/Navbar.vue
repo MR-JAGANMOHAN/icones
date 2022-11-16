@@ -41,7 +41,7 @@ export default defineComponent(() => ({
       <a
         class="non-dragging"
         i-carbon-logo-github icon-button flex-none
-        href="https://github.com/antfu/icones"
+        href="https://mr-jaganmohan.github.io/"
         target="_blank"
       />
       <DarkSwitcher flex-none />
