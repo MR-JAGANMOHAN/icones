@@ -12,7 +12,8 @@ export async function getSvgLocal(icon: string, size = '1em', color = 'currentCo
   const built = buildIcon(data, { height: size })
   if (!built)
     return
-  return `<svg ${Object.entries(built.attributes).map(([k, v]) => `${k}="${v}"`).join(' ')}>${built.body}</svg>`.replace('currentColor', color)
+  const xlink = built.body.includes('xlink:') ? ' xmlns:xlink="http://www.w3.org/1999/xlink"' : ''
+  return `<svg xmlns="http://www.w3.org/2000/svg"${xlink} ${Object.entries(built.attributes).map(([k, v]) => `${k}="${v}"`).join(' ')}>${built.body}</svg>`.replace('currentColor', color)
 }
 
 export async function getSvg(icon: string, size = '1em', color = 'currentColor') {
@@ -78,8 +79,8 @@ export function ${name}(props: SVGProps<SVGSVGElement>) {
     return `import React, { SVGProps } from 'react'\n${code}\nexport default ${name}`
 }
 
-export function SvgToVue(svg: string, name: string) {
-  return `
+export function SvgToVue(svg: string, name: string, isTs?: boolean) {
+  const contet = `
 <template>
   ${ClearSvg(svg)}
 </template>
@@ -89,6 +90,7 @@ export default {
   name: '${name}'
 }
 </script>`
+  return isTs ? contet.replace('<script>', '<script lang="ts">') : contet
 }
 
 export function SvgToSvelte(svg: string) {
@@ -126,6 +128,8 @@ export async function getIconSnippet(icon: string, type: string, snippet = true,
       return SvgToTSX(await getSvg(icon, undefined, color), toComponentName(icon), snippet)
     case 'vue':
       return SvgToVue(await getSvg(icon, undefined, color), toComponentName(icon))
+    case 'vue-ts':
+      return SvgToVue(await getSvg(icon, undefined, color), toComponentName(icon), true)
     case 'svelte':
       return SvgToSvelte(await getSvg(icon, undefined, color))
     case 'unplugin':

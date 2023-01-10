@@ -18,11 +18,10 @@ const { search, icons, category, collection } = getSearchResults()
 const loading = isCurrentCollectionLoading()
 
 const maxMap = new Map<string, number>()
+const id = $computed(() => collection.value?.id)
 const url = $computed(() => collection.value?.url || collection.value?.author?.url)
-const namespace = $computed(() => !collection.value || collection.value.id === 'all'
-  ? ''
-  : `${collection.value.id}:`,
-)
+const npm = $computed(() => id != null && id !== 'all' ? `https://www.npmjs.com/package/@iconify-json/${id}` : '')
+const namespace = $computed(() => id != null && id !== 'all' ? `${id}:` : '')
 
 function onCopy(status: boolean) {
   copied = status
@@ -159,6 +158,14 @@ onKeyStroke('Escape', () => {
               >
                 <Icon icon="la:external-link-square-alt-solid" />
               </a>
+              <a
+                v-if="npm"
+                class="ml-1 mt-1 text-base opacity-25 hover:opacity-100"
+                :href="npm"
+                target="_blank"
+              >
+                <Icon icon="la:npm" />
+              </a>
               <div class="flex-auto" />
             </div>
             <div class="text-xs block opacity-50">
@@ -181,13 +188,13 @@ onKeyStroke('Escape', () => {
         </div>
 
         <!-- Categories -->
-        <div class="py-2 px-7 overflow-x-overlay flex flex-no-wrap select-none">
+        <div class="py-3 mx-8 overflow-x-overlay flex flex-nowrap gap-2 select-none">
           <template v-if="collection.categories">
             <div
               v-for="c of Object.keys(collection.categories)"
               :key="c"
               class="
-                whitespace-nowrap text-sm inline-block px-2 border border-gray-200 rounded-full m-1 hover:bg-gray-50 cursor-pointer
+                whitespace-nowrap text-sm inline-block px-2 border border-gray-200 rounded-full hover:bg-gray-50 cursor-pointer
                 dark:border-dark-200 dark:hover:bg-dark-200
               "
               :class="c === category ? 'text-primary border-primary dark:border-primary' : 'opacity-75'"
